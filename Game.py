@@ -46,13 +46,25 @@ class Huncho_Derivative:
 
     def message(self, setting):
         if self.winner == setting.player1.col:
-            print(f"{setting.player1.nickName} WINS!!!")
-            print(f"{setting.player2.nickName} LOSES!!!")
-            setting.player1.calculate_experince(True)
-            setting.player2.calculate_experince(False)
+            if (self.winner == 'red' and not setting.red_AI) or (self.winner == 'black' and not setting.black_AI):
+                print(f"{setting.player1.nickName} WINS!!!")
+                setting.player1.calculate_experince(True)
+            else:
+                print(f"{self.winner.upper()} AI WINS!")
+            if (self.winner != 'red' and not setting.red_AI) or (self.winner != 'black' and not setting.black_AI):
+                print(f"{setting.player2.nickName} LOSES!!!")
+                setting.player2.calculate_experince(False)
+            else:
+                print(f"{setting.player2.col.upper()} AI LOSES")
         else:
-            print(f"{setting.player2.nickName} WINS!!!")
-            print(f"{setting.player1.nickName} LOSES!!!")
-            setting.player2.calculate_experince(True)
-            setting.player1.calculate_experince(False)
+            if (self.winner == 'red' and not setting.red_AI) or (self.winner == 'black' and not setting.black_AI):
+                print(f"{setting.player2.nickName} WINS!!!")
+                setting.player2.calculate_experince(True)
+            else:
+                print(f"{self.winner.upper()} AI WINS!")
+            if (self.winner != 'red' and not setting.red_AI) or (self.winner != 'black' and not setting.black_AI):
+                print(f"{setting.player1.nickName} LOSES!!!")
+                setting.player1.calculate_experince(False)
+            else:
+                print(f"{setting.player1.col.upper()} AI LOSES")
         print(f"{self.winner} Wins!!! ")
