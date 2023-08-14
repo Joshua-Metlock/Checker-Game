@@ -55,6 +55,10 @@ class Checkers:
                 huncho_Derivative.check_jump(dungeon, checkJump)
                 checkedJump = 1
 
+            if (self.setting.red_AI and dungeon.turn == 'red') or (self.setting.black_AI and dungeon.turn == 'black'):
+                if dungeon.handle_AI(checkJump):
+                    checkedJump = 0
+
             # Loop through events.
             for self.event in pygame.event.get():
                 # If event is pyGame.quit, exit game by setting self.running to False
@@ -64,6 +68,7 @@ class Checkers:
                 # Check if user has clicked on a tile
                 if not huncho_Derivative.is_game_over(dungeon):
                     if self.event.type == pygame.MOUSEBUTTONDOWN:
+                        #if (not self.setting.red_AI and dungeon.turn == 'red') or (not self.setting.black_AI and dungeon.turn == 'black'):
                         if dungeon.handle_click(self.event.pos, checkJump):
                             checkedJump = 0
                 # If the game is over display game over message and exit loop
@@ -85,7 +90,7 @@ if __name__ == "__main__":
     pygame.display.set_caption("Checkers")
     # sets up the display screen and starts the game loop
     menu = Menu(window_size, screen)
-
+    wins = 0
     while menu.loop:
         menu.draw()
         if menu.loop:

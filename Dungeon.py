@@ -2,6 +2,7 @@
 import pygame
 from Tile import Tile
 from Pawn import Pawn
+from random import choice
 
 
 class Dungeon:
@@ -70,7 +71,9 @@ class Dungeon:
             y = y // self.tile_height
         # Retrieve tile from coordinates
         clicked_tile = self.get_tile_from_pos((x, y))
-
+        """
+        print(clicked_tile.pos)
+        """
         # Checks to see if the player has not selected a piece
         if self.selected_piece is None:
             #  Checks to see if the tile selected has anything
@@ -101,6 +104,43 @@ class Dungeon:
             if clicked_tile.occupying_piece.color == self.turn:
                 self.selected_piece = clicked_tile.occupying_piece
 
+    # Handle_AI deals with moving pieces during the AI's turn.
+    def handle_AI(self, checkjump):
+        # If the AI has not selected a piece.
+        if self.selected_piece is None:
+            # Find all valid pieces to click on
+            valid_pieces = []
+            for y in range(self.dungeon_size):
+                for x in range(self.dungeon_size):
+                    tile = self.get_tile_from_pos((x, y))
+                    if tile.occupying_piece != None:
+                        if tile.occupying_piece.color == self.turn:
+                            valid_pieces.append(tile.occupying_piece)
+            if len(valid_pieces) > 0:
+                self.selected_piece = choice(valid_pieces)
+                return False
+        else:
+            # Code for handling AI Jumping
+            if len(self.selected_piece.valid_jumps()) > 0:
+                clicked_tile = choice(self.selected_piece.valid_jumps())
+                clicked_tile = choice(clicked_tile)
+                """
+                for x in clicked_tile:
+                    print(x.pos)
+                """
+                if self.selected_piece._move(clicked_tile, checkjump):
+                    print("CJ")
+                    if len(clicked_tile.occupying_piece.valid_jumps()) == 0:
+                        self.turn = 'red' if self.turn == 'black' else 'black'
+                        return True
+            elif not self.is_jump and len(self.selected_piece.valid_moves()) > 0:
+                clicked_tile = choice(self.selected_piece.valid_moves())
+                if self.selected_piece._move(clicked_tile, checkjump):
+                    self.turn = 'red' if self.turn == 'black' else 'black'
+                    return True
+            else:
+                self.selected_piece = None
+                return False
     # The draw method is used to update the display after handle_click method is called
     def draw(self, display, checkJump):
         # If a piece is currently selected, highlight the tile it is on and all valid moves/jumps

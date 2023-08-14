@@ -44,6 +44,7 @@ class Piece:
         # because it's an jump move, update position and remove piece jumped over
         elif self.dungeon.is_jump:
             for move in self.valid_jumps():
+                print(tile in move)
                 if tile in move:
                     prev_tile = self.dungeon.get_tile_from_pos(self.pos)
                     jumped_piece = move[-1]
@@ -60,6 +61,7 @@ class Piece:
                             tile.occupying_piece = King(
                                 self.x, self.y, self.color, self.dungeon
                             )
+                    print("JC")
                     return True
         else:
             # if the move is not valid, return false and do not move the piece and

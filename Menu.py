@@ -18,6 +18,9 @@ class Menu:
     player1_img = pygame.image.load(f'images/Player 1.png')
     player2_img = pygame.image.load(f'images/Player 2.png')
     reset_img = pygame.image.load(f'images/Reset.png')
+    swap_img = pygame.image.load(f'images/Swap.png')
+    black_ai_img = pygame.image.load(f'images/Black AI.png')
+    red_ai_img = pygame.image.load(f'images/Red AI.png')
 
     # Buttons
     options_button = Button(425, 400, options_img, .4)
@@ -25,10 +28,13 @@ class Menu:
     play_button = Button(25, 400, play_img, .4)
     forcedJump_button = Button(225, 200, forcedJump_img, .4)
     return_button = Button(425, 200, return_img, .4)
-    player1_button = Button(25, 150, player1_img, .3)
-    player2_button = Button(25, 350, player2_img, .3)
-    reset1_button = Button(175, 150, reset_img, .3)
-    reset2_button = Button(175, 350, reset_img, .3)
+    player1_button = Button(25, 150, player1_img, .2)
+    player2_button = Button(25, 400, player2_img, .2)
+    reset1_button = Button(150, 150, reset_img, .2)
+    reset2_button = Button(150, 400, reset_img, .2)
+    swap_button = Button(250, 250, swap_img, .3)
+    black_ai_button = Button(25, 5, black_ai_img,  .4)
+    red_ai_button = Button(225, 5, red_ai_img, .4)
 
     def __init__(self, window_size, screen):
         # State
@@ -86,6 +92,12 @@ class Menu:
                 self.screen.fill((48, 150, 220))
                 #
                 self.draw_text(self.setting.forced_jump, self.font, self.text_col, 225, 400)
+                self.draw_text(str(self.setting.red_AI), self.font, self.text_col, 25, 500)
+                self.draw_text(str(self.setting.black_AI), self.font, self.text_col, 25, 550)
+                if Menu.red_ai_button.draw(self.screen):
+                    self.setting.red_AI = not self.setting.red_AI
+                if Menu.black_ai_button.draw(self.screen):
+                    self.setting.black_AI = not self.setting.black_AI
                 if Menu.forcedJump_button.draw(self.screen):
                     if self.setting.forced_jump == 'yes':
                         self.setting.forced_jump = 'no'
@@ -102,6 +114,10 @@ class Menu:
                     self.state = 'main'
                     active1 = False
                     active2 = False
+                if Menu.swap_button.draw(self.screen):
+                    temp_holder = self.setting.player1.col
+                    self.setting.player1.col = self.setting.player2.col
+                    self.setting.player2.col = temp_holder
                 # Code dealing with Player1 Button
                 # Which allows the user to change Nickname
                 player1text = str(self.setting.player1)
